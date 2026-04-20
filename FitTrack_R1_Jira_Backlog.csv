@@ -1,0 +1,48 @@
+Issue Id,Issue Type,Epic Name,Summary,Description,Priority,Labels,Components,Story Points,Epic Link,Parent,Fix Version/s
+E1,Epic,R1 – Wearables Sync,R1 – Wearables Sync (Apple Health & Google Fit),"Enable users to connect Apple Health/Google Fit to auto-import steps, sleep, and heart-rate summaries with consent, manual sync, and last-sync display.",High,R1,Product,,,,R1
+E2,Epic,R1 – Onboarding Quiz → Instant Plan,R1 – Onboarding Quiz to plan,"Short quiz (6–9 Qs) that outputs a 4-week plan aligned to goal, time, equipment, and dietary preferences.",High,R1,Product,,,,R1
+E3,Epic,R1 – AI Meal Planner + Grocery List,R1 – Meal Planner MVP,Generate 7-day meal plans with macros and a consolidated grocery list; support veg/vegan; swap and regenerate.,High,R1,Product,,,,R1
+E4,Epic,R1 – Habit Stacks with Streaks,R1 – Habit Stacks,"Predefined daily habits (Protein, Steps, Sleep, Sunlight) with streaks, gentle nudges, and auto-complete from wearable data.",High,R1,Product,,,,R1
+E5,Epic,R1 – Smart Paywall v1,R1 – Smart Paywall,"Personalized trials/prices with experiment assignment, variant-specific value props based on user goal.",High,R1,Product,,,,R1
+S1,Story,,Connect Apple Health during onboarding,"As a new user (iOS), I can connect Apple Health (steps, HR summary, sleep) during onboarding to personalize my plan.
+AC:
+- Status shows Connected
+- Last sync timestamp is visible
+- Events fired: wearable_sync_connected, wearable_sync_failed",High,R1,iOS;Backend;Analytics,5.0,E1,,R1
+T1,Task,,Implement HealthKit permission & scopes,Request and store HealthKit permissions; graceful decline handling.,Medium,R1,iOS,3.0,,S1,R1
+T2,Task,,Consent UI & copy,Consent view with per-signal toggles and link to Privacy Center.,Medium,R1,iOS;Design,2.0,,S1,R1
+T3,Task,,Event wiring & QA checklist,Emit events and verify via QA; add last-sync display.,Medium,R1,iOS;Analytics,1.0,,S1,R1
+S2,Story,,Connect Google Fit during onboarding,"As a new user (Android), I can connect Google Fit to import steps and sleep.
+AC:
+- Connected state persists
+- Manual 'Sync now' triggers refresh
+- Events fired",High,R1,Android;Backend;Analytics,5.0,E1,,R1
+T4,Task,,Google Fit OAuth & token storage,Implement Fitness API connect and secure token handling.,Medium,R1,Android;Backend,3.0,,S2,R1
+T5,Task,,Foreground refresh & manual Sync now,Fetch last 24h metrics on open and on demand.,Medium,R1,Android;Backend,2.0,,S2,R1
+S3,Story,,Per-signal toggles & disconnect flow,"As a user, I can toggle which signals (Steps/Sleep/HR) are imported and disconnect any time.
+AC:
+- Toggle off Sleep prevents new imports
+- Disconnect stops fetching and informs about data deletion options",High,R1,iOS;Android;Backend;Design,3.0,E1,,R1
+S4,Story,,Quiz generates 4-week plan,"As a new user, I complete a 6–9 Q quiz and receive a 4-week plan with sessions/week aligned to time and equipment.
+AC:
+- Plan created ≤3 minutes
+- 'Start Plan' schedules reminders",High,R1,Mobile;Backend;Design,5.0,E2,,R1
+S5,Story,,Equipment-aware swaps,"Exercises requiring unavailable equipment are auto-swapped to equivalents.
+AC:
+- No dumbbells? swap to bodyweight variants within same movement pattern.",High,R1,Backend;Content,3.0,E2,,R1
+S6,Story,,Generate 7-day meal plan with macros,"User inputs calories/macros and dietary preference (veg/vegan/non-veg) to get a 7-day plan (3 meals + optional snacks) within ±5% target.
+AC:
+- Per-meal macro breakdown
+- Regenerate a day",High,R1,Mobile;Backend;ML;Design,8.0,E3,,R1
+S7,Story,,Consolidated grocery list,"From a generated plan, produce a grouped grocery list with deduplicated quantities.
+AC:
+- Group by category
+- Export/share",High,R1,Mobile;Backend;Design,3.0,E3,,R1
+S8,Story,,Predefined habits with streaks,"Track Protein, Steps, Sleep, Sunlight habits with streaks and weekly summary.
+AC:
+- Auto-complete from wearable for Steps/Sleep
+- Rate-limited nudges (≤1/day)",High,R1,Mobile;Backend;Analytics,5.0,E4,,R1
+S9,Story,,Smart Paywall experiments,"Personalized value props aligned to goal; assign variants for trial length and pricing.
+AC:
+- Sticky variant for 30 days
+- Events: paywall_shown, paywall_purchased",High,R1,Mobile;Backend;Analytics;Design,5.0,E5,,R1

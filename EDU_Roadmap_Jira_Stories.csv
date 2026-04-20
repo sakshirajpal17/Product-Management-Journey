@@ -1,0 +1,105 @@
+Issue Id,Issue Type,Epic Name,Epic Link,Summary,Description,Priority,Labels,Components,Story Points,Fix Version/s,Sprint
+E1,Epic,EDU-R1 — Personalization & Engagement Foundations,,EDU-R1 — Personalization & Engagement Foundations,"Ship AI recommendations, interactive quizzes, learning paths, mobile offline beta, and gamification to increase course starts, completion, and Weekly Learning Minutes (WLM).
+KPIs: Course Start Rate, D30 Completion, Paid CVR, DAU/MAU, NPS. North Star: Weekly Learning Minutes per Active Learner.
+",High,"edulearn,R1,personalization,engagement",Product,,Q4-2025,
+S1,Story,,E1,AI Recommendations MVP — Personalized “Recommended for you” rail,"Headline: “Show me the next best course—right when I’m ready.”
+User Story: As a learner, I want a personalized “Recommended for you” rail on Home & Catalog so that I can quickly find relevant courses without searching.
+Acceptance Criteria (Gherkin):
+Scenario: Recommendations visible on Home
+  Given I am an authenticated learner with at least 1 enrolled course
+  When I open the Home screen
+  Then I see a ""Recommended for you"" rail with at least 8 items
+  And each item shows title, provider, rating, and time-to-complete
+Scenario: Cold-start fallback
+  Given I am a new learner with no activity
+  When I open Home
+  Then I see a popularity- & category-based fallback list
+Scenario: Recommendation clickthrough
+  Given I see the recommendation rail
+  When I click a recommended course
+  Then I land on the course detail page
+  And an event ""rec_click"" is emitted with {course_id, position, algo_variant}
+Scenario: Model guardrails
+  Given a course is not available in my region or plan
+  When the model returns that course
+  Then it is filtered out and replaced by the next best candidate
+Events: rec_impression, rec_click, rec_enroll, rec_dismiss.
+DoD: AC pass; events verified; feature-flagged; privacy copy approved.
+",High,"edulearn,recommendations,MVP",backend-ml;web;mobile;analytics,8.0,Q4-2025,"Sprint 1 (Oct 6–Oct 17, 2025)"
+S2,Story,,E1,Interactive Quiz Engine v1 — Inline quizzes with instant feedback,"Headline: “Let me check my understanding as I learn.”
+User Story: As a learner, I want short in-lesson quizzes with instant feedback so that I can validate my progress and fill gaps.
+Acceptance Criteria (Gherkin):
+Scenario: Inline quiz appears in lesson
+  Given a lesson with a quiz block
+  When I reach the quiz section
+  Then the quiz renders with question, options, and ""Check answer""
+Scenario: Instant feedback
+  Given I answered the question
+  When I tap ""Check answer""
+  Then I see correct/incorrect feedback and an explanation
+  And an event ""quiz_attempt"" is sent with {lesson_id, question_id, correct}
+Scenario: Retry
+  Given I answered incorrectly
+  When I retry
+  Then I can attempt again (max 2 retries) and feedback updates
+Scenario: Accessibility
+  Given I navigate via keyboard or screen reader
+  Then all quiz interactions are accessible per WCAG AA
+Events: quiz_impression, quiz_attempt, quiz_completed.
+DoD: WCAG AA checks; analytics QA; authoring docs for instructors.
+",High,"edulearn,quiz,learning-experience",web;mobile;backend;design;analytics,8.0,Q4-2025,"Sprint 1 (Oct 6–Oct 17, 2025)"
+S3,Story,,E1,Learning Paths 1.0 — Auto-curated sequences with progress tracking,"Headline: “Guide me from beginner to job-ready.”
+User Story: As a learner with a goal (e.g., Data Analyst), I want an auto-curated path of courses so that I can progress without deciding each step.
+Acceptance Criteria (Gherkin):
+Scenario: Path generation
+  Given I select a goal and experience level
+  When I tap ""Generate path""
+  Then I receive a sequenced list of 5–8 courses with estimated duration and prerequisites
+Scenario: Progress tracking
+  Given I have started the path
+  When I complete a course
+  Then the path shows progress % and unlocks the next course
+Scenario: Swap equivalence
+  Given I can't access a suggested course
+  When I tap ""Swap""
+  Then I see 2–3 equivalent alternatives with similar learning outcomes
+Events: path_created, path_course_started, path_course_completed, path_swap.
+DoD: AC pass; telemetry verified; help center article updated.
+",High,"edulearn,learning-paths,personalization",backend-ml;web;mobile;analytics,8.0,Q4-2025,"Sprint 2 (Oct 20–Oct 31, 2025)"
+S4,Story,,E1,Mobile App Beta — Offline lesson downloads & playback,"Headline: “Learn anywhere—even when I’m offline.”
+User Story: As a mobile learner, I want to download lessons for offline playback so that I can study with limited connectivity.
+Acceptance Criteria (Gherkin):
+Scenario: Download lesson
+  Given I am on a lesson detail screen
+  When I tap ""Download""
+  Then the lesson downloads and shows progress and available offline badge
+Scenario: Offline playback
+  Given the device is offline
+  When I open the downloaded lesson
+  Then video and resources play locally without errors
+Scenario: Storage management
+  Given I have multiple downloads
+  When I open ""Downloads""
+  Then I see size per item and a ""Remove"" option
+Security/DRM: encrypt assets at rest; block screen recording where required.
+Events: download_start, download_complete, offline_play.
+DoD: QA on low-end devices; storage edge cases; analytics verified.
+",High,"edulearn,mobile,offline",mobile-ios;mobile-android;media-service;analytics,13.0,Q1-2026,Sprint 5–6 (Dec–Jan)
+S5,Story,,E1,"Gamification Lite — XP, streaks, and milestone badges","Headline: “Reward my consistency to keep me motivated.”
+User Story: As a learner, I want XP for study actions, streaks for daily learning, and badges for milestones so that I stay engaged.
+Acceptance Criteria (Gherkin):
+Scenario: XP earning
+  Given I spend time learning
+  When I complete a lesson/quiz
+  Then I earn XP according to rules and see a toast
+Scenario: Streaks
+  Given I have learned for N consecutive days
+  When I open the app
+  Then I see my streak count and a nudge if I'm about to lose it
+Scenario: Badges
+  Given I achieved a milestone
+  When I view my profile
+  Then I see the badge unlocked with date and criteria
+Events: xp_earned, streak_day, badge_unlocked.
+DoD: rate-limiting; anti-gaming rules; copy & assets approved.
+",High,"edulearn,gamification,engagement",backend;web;mobile;design;analytics,5.0,Q1-2026,"Sprint 4 (Nov 17–Nov 28, 2025)"
